@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.js": "/react--alpaca--image-generator/static/js/main.89bf58a9.chunk.js",
+    "main.js.map": "/react--alpaca--image-generator/static/js/main.89bf58a9.chunk.js.map",
+    "runtime-main.js": "/react--alpaca--image-generator/static/js/runtime-main.30f47a09.js",
+    "runtime-main.js.map": "/react--alpaca--image-generator/static/js/runtime-main.30f47a09.js.map",
+    "static/js/2.5cc24648.chunk.js": "/react--alpaca--image-generator/static/js/2.5cc24648.chunk.js",
+    "static/js/2.5cc24648.chunk.js.map": "/react--alpaca--image-generator/static/js/2.5cc24648.chunk.js.map",
+    "static/js/3.a376064b.chunk.js": "/react--alpaca--image-generator/static/js/3.a376064b.chunk.js",
+    "static/js/3.a376064b.chunk.js.map": "/react--alpaca--image-generator/static/js/3.a376064b.chunk.js.map",
+    "index.html": "/react--alpaca--image-generator/index.html",
+    "static/js/2.5cc24648.chunk.js.LICENSE.txt": "/react--alpaca--image-generator/static/js/2.5cc24648.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.30f47a09.js",
+    "static/js/2.5cc24648.chunk.js",
+    "static/js/main.89bf58a9.chunk.js"
+  ]
+}
