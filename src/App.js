@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -9,6 +9,12 @@ import {
   HStack,
   Grid,
   theme,
+  Image,
+  Tabs,
+  Tab,
+  TabPanels,
+  TabPanel,
+  TabList,
 } from '@chakra-ui/react';
 
 import mergeImages from 'merge-images';
@@ -101,9 +107,16 @@ const face = {
   },
 };
 
+const options = Object.keys(face)
+
+function randomProps(object) {
+  const keyArr = Object.keys(object);
+  const item = keyArr[Math.floor(Math.random() * keyArr.length)];
+  return object[item];
+}
+
 function App() {
   const [img, setImg] = useState('');
-  const [option, setOption] = useState('hair');
   const [alpaca, setAlpaca] = useState({
     background: blue50,
     ears: face.ears.default,
@@ -114,30 +127,18 @@ function App() {
     mouth: face.mouth.default,
     hair: face.hair.default,
   });
-
   const imgArr = Object.values(alpaca);
-  mergeImages(imgArr).then(b64 => setImg(b64));
+  useEffect(() => {
+    mergeImages(imgArr).then(b64 => setImg(b64));
+  }, [imgArr])
 
-  const handleClick = e => {
+  const handleClick = (option) => e => {
     // e.preventDefault();
     const value = e.currentTarget.value;
     setAlpaca({ ...alpaca, [option]: face[option][value] });
-    const imgArr = Object.values(alpaca);
-    mergeImages(imgArr).then(b64 => setImg(b64));
-  };
-
-  const handleOption = e => {
-    const value = e.target.value;
-    setOption(value);
   };
 
   const handleRandom = () => {
-    function randomProps(object) {
-      const keyArr = Object.keys(object);
-      const item = keyArr[Math.floor(Math.random() * keyArr.length)];
-      return object[item];
-    }
-
     setAlpaca({
       ...alpaca,
       background: randomProps(face.background),
@@ -160,62 +161,57 @@ function App() {
               w="32"
               h="32"
               borderRadius="lg"
-              bgImage={`url('${alpaca.mouth}'),url('${alpaca.eyes}'),url('${alpaca.hair}'),url('${alpaca.nose}'),url('${alpaca.ears}'),url('${alpaca.leg}'),url('${alpaca.neck}'),url('${alpaca.background}')`}
+              bgImage={imgArr.map(src =>`url('${src}')`).reverse().join(',')}
               bgRepeat="no-repeat"
               bgSize="cover"
             ></Box>
+            {/* <Image w="32" h="32" src={img} /> */}
             <HStack spacing={2}>
               <Button onClick={handleRandom}>Random</Button>
-              <Link href={img} download="Alpaca">
-                <Button>Download</Button>
-              </Link>
+              <Button as={Link} href={img} download="Alpaca">
+                Download
+              </Button>
             </HStack>
             <Text>ACCESSORIZE THE ALPACA'S</Text>
-            <Box>
-              {Object.keys(face).map((item, key) => (
-                <Button
-                  key={key}
-                  value={item}
-                  onClick={handleOption}
-                  bg={item === option ? 'white' : 'none'}
-                  fontSize="sm"
-                >
-                  {item}
-                </Button>
-              ))}
-            </Box>
-            <Text>Style</Text>
-            <Box>
-              {Object.keys(face[option]).map((item, key) => (
-                <Button
-                  key={key}
-                  mx="1"
-                  my="1"
-                  color="gray.600"
-                  border="1px solid white"
-                  overflow="hidden"
-                  value={item}
-                  onClick={handleClick}
-                  fontSize="sm"
-                  bg={
-                    face[option][item] === alpaca[option] ? 'gray.200' : 'none'
-                  }
-                >
-                  {'hair' === option && (
-                    <Box
-                      top="-2"
-                      w="14"
-                      h="14"
-                      bgRepeat="no-repeat"
-                      bgSize="140%"
-                      bgPosition="75% 20%"
-                      bgImage={`url(${face[option][item]})`}
-                    />
-                  )}
-                  {item}
-                </Button>
-              ))}
-            </Box>
+            <Tabs size="lg" align="center">
+              <TabList>{options.map((opt, i) => <Tab key={i}>{opt}</Tab>)}</TabList>
+              <TabPanels>
+                {options.map((option, i) => (
+                  <TabPanel key={i}>
+                    <Text>Style</Text>
+                    {Object.keys(face[option]).map((item, key) => (
+                      <Button
+                        key={key}
+                        mx="1"
+                        my="1"
+                        color="gray.600"
+                        border="1px solid white"
+                        overflow="hidden"
+                        value={item}
+                        onClick={handleClick(option)}
+                        fontSize="sm"
+                        bg={
+                          face[option][item] === alpaca[option] ? 'gray.200' : 'none'
+                        }
+                      >
+                        {'hair' === option && (
+                          <Box
+                            top="-2"
+                            w="14"
+                            h="14"
+                            bgRepeat="no-repeat"
+                            bgSize="140%"
+                            bgPosition="75% 20%"
+                            bgImage={`url(${face[option][item]})`}
+                          />
+                        )}
+                        {item}
+                      </Button>
+                    ))}
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
           </VStack>
         </Grid>
       </Box>
