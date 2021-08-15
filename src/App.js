@@ -9,6 +9,7 @@ import {
   HStack,
   Grid,
   theme,
+  Image,
 } from '@chakra-ui/react';
 
 import mergeImages from 'merge-images';
@@ -17,7 +18,7 @@ import nose from '../src/alpaca/nose.png';
 
 import hairBang from '../src/alpaca/hair/bang.png';
 import hairCurls from '../src/alpaca/hair/curls.png';
-import hairDefault from '../src/alpaca/hair/default.png';
+// import hairDefault from '../src/alpaca/hair/default.png';
 import hairElegant from '../src/alpaca/hair/elegant.png';
 import hairFancy from '../src/alpaca/hair/fancy.png';
 import hairShort from '../src/alpaca/hair/short.png';
@@ -52,10 +53,17 @@ import blue50 from '../src/alpaca/backgrounds/blue50.png';
 import blue60 from '../src/alpaca/backgrounds/blue60.png';
 import red50 from '../src/alpaca/backgrounds/red50.png';
 import green50 from '../src/alpaca/backgrounds/green50.png';
+//es6
 
 const face = {
+  eyes: {
+    default: eyesDefault,
+    angry: eyesAngry,
+    naughty: eyesNaughty,
+  },
   hair: {
-    default: hairDefault,
+    default: require('../src/alpaca/hair/default.png').default,
+    //es5
     bang: hairBang,
     curls: hairCurls,
     elegant: hairElegant,
@@ -66,11 +74,6 @@ const face = {
     default: earsDefault,
     'Tilt Backward': earsTiltBackward,
     'Tilt Forward': earsTiltForward,
-  },
-  eyes: {
-    default: eyesDefault,
-    angry: eyesAngry,
-    naughty: eyesNaughty,
   },
   mouth: {
     default: mouthDefault,
@@ -109,20 +112,21 @@ function App() {
     ears: face.ears.default,
     leg: face.leg.default,
     neck: face.neck.default,
-    eyes: face.eyes.default,
     nose: nose,
     mouth: face.mouth.default,
     hair: face.hair.default,
+    eyes: face.eyes.default,
   });
 
   const imgArr = Object.values(alpaca);
+  // console.log('imgArr', imgArr);
   mergeImages(imgArr).then(b64 => setImg(b64));
 
   const handleClick = e => {
     // e.preventDefault();
     const value = e.currentTarget.value;
     setAlpaca({ ...alpaca, [option]: face[option][value] });
-    const imgArr = Object.values(alpaca);
+    // const imgArr = Object.values(alpaca);
     mergeImages(imgArr).then(b64 => setImg(b64));
   };
 
@@ -160,10 +164,16 @@ function App() {
               w="32"
               h="32"
               borderRadius="lg"
-              bgImage={`url('${alpaca.mouth}'),url('${alpaca.eyes}'),url('${alpaca.hair}'),url('${alpaca.nose}'),url('${alpaca.ears}'),url('${alpaca.leg}'),url('${alpaca.neck}'),url('${alpaca.background}')`}
+              bgImage={imgArr
+                .map(src => `url('${src}')`)
+                .reverse()
+                .join(',')}
+              // bgImage={`url('${alpaca.mouth}'),url('${alpaca.eyes}'),url('${alpaca.hair}'),url('${alpaca.nose}'),url('${alpaca.ears}'),url('${alpaca.leg}'),url('${alpaca.neck}'),url('${alpaca.background}')`}
               bgRepeat="no-repeat"
               bgSize="cover"
             ></Box>
+            {/* <Image w="32" h="32" src={img} /> */}
+            {/* 會閃爍 */}
             <HStack spacing={2}>
               <Button onClick={handleRandom}>Random</Button>
               <Link href={img} download="Alpaca">
